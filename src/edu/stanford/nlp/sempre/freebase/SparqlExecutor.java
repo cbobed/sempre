@@ -69,7 +69,7 @@ public class SparqlExecutor extends Executor {
 
   public static Options opts = new Options();
 
-  private final FreebaseInfo fbInfo;
+//  private final FreebaseInfo fbInfo;
   private final StringCache query2xmlCache;
 
   // Statistics on Sparql requests
@@ -82,7 +82,10 @@ public class SparqlExecutor extends Executor {
   private SparqlStats queryStats = new SparqlStats();
 
   public SparqlExecutor() {
-    this.fbInfo = FreebaseInfo.getSingleton();
+	  
+// 		CBL: first try to get rid of the Freebase dependence
+//    this.fbInfo = FreebaseInfo.getSingleton();
+	  
     this.query2xmlCache = StringCacheUtils.create(opts.cachePath);
   }
 
@@ -338,7 +341,13 @@ public class SparqlExecutor extends Executor {
         query.offset = offset;
       if (query.limit == -1)  // If not set
         query.limit = maxResults;
-      queryStr = "PREFIX fb: <" + FreebaseInfo.freebaseNamespace + "> " + query;
+      queryStr = "PREFIX fb: <" + FreebaseInfo.freebaseNamespace + "> " + 
+    		  "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> " + 
+    		  "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> " + 
+    		  "PREFIX dbo: <http://dbpedia.org/ontology/> " + 
+    		  "PREFIX dbr: <http://dbpedia.org/resource/> " +
+    		  "PREFIX dbp: <http://dbpedia.org/property/> "    		  
+    		  + query;
     }
 
     // Strip off lambdas and add the variables to the environment
@@ -435,7 +444,9 @@ public class SparqlExecutor extends Executor {
     private void addStatement(SparqlBlock block, PrimitiveFormula arg1, String property, PrimitiveFormula arg2, boolean optional) {
       block.addStatement(arg1, property, arg2, optional);
 
-      if (arg1 instanceof VariableFormula) {
+      /* 
+       
+       	if (arg1 instanceof VariableFormula) {
         VariableFormula var = (VariableFormula) arg1;
 
         // If the statement is ?x = <value>, then extract unit from value.
@@ -463,6 +474,8 @@ public class SparqlExecutor extends Executor {
         descriptionsMap.put(var, fbInfo.getName(property));
         if (opts.verbose >= 3) LogInfo.logs("description arg2=%s => %s => %s", var, property, descriptionsMap.get(var));
       }
+      
+      */
     }
 
     void addEntityStatement(SparqlBlock block, VariableFormula var) {
@@ -676,7 +689,12 @@ public class SparqlExecutor extends Executor {
         // Variable representing the aggregation
         VariableFormula newVar = (VariableFormula) newHead.value;  // e.g., ?y = COUNT(?x)
         String headUnit = formula.mode == AggregateFormula.Mode.count ? NumberValue.unitless : unitsMap.get(newHead.value);
-        updateUnit(var, headUnit);
+        
+        /* 
+         * updateUnit(var, headUnit);
+         */
+        
+        
         descriptionsMap.put(var, capitalize(formula.mode.toString()));
 
         // If do aggregation on dates, need to convert wrap with xsd:datetime

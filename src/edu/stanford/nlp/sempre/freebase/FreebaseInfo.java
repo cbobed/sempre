@@ -284,7 +284,9 @@ public final class FreebaseInfo {
   }
   public static String uri2id(String uri) {
     if (!uri.startsWith(freebaseNamespace)) {
-      LogInfo.logs("Warning: invalid Freebase uri: %s", uri);
+      
+    // LogInfo.logs("Warning: invalid Freebase uri: %s", uri);
+    	
       // Don't do any conversion; this is not necessarily the best thing to do.
       return uri;
     }

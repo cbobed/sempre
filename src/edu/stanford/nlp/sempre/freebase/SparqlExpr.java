@@ -42,8 +42,12 @@ class SparqlBlock implements SparqlExpr {
   }
 
   void addStatement(PrimitiveFormula arg1, String property, PrimitiveFormula arg2, boolean optional) {
-    if (!property.startsWith("fb:") && !SparqlStatement.isOperator(property) && !SparqlStatement.isSpecialFunction(property) && !SparqlStatement.isIndependent(property))
-      throw new RuntimeException("Invalid SPARQL property: " + property);
+    /* if (!property.startsWith("fb:") 
+    		&& !SparqlStatement.isOperator(property) 
+    		&& !SparqlStatement.isSpecialFunction(property) 
+    		&& !SparqlStatement.isIndependent(property))
+      throw new RuntimeException("Invalid SPARQL property: " + property); */
+    
     // Ignore statements like:
     //   ?x fb:type.object.type fb:type.datetime
     // because we should have already captured the semantics using other formulas that involve ?x.
