@@ -1,3 +1,5 @@
+<!-- Required extensions: pymdownx.tasklist, pymdownx.highlight, pymdownx.mark -->
+
 # Hands-on steps
 After cloning/forking the project: 
 
@@ -14,7 +16,7 @@ All of them are required to solve the dependency problems. Apart from that, fig.
 
 To make it run from commandline, it has to be built with the ant script it contains. We have to modify it a little to include the src directory of fig in the compilation process: 
 
-```xml 
+```XML 
 <property name="figSRC" location="${root}/fig/src/main/java/"/>
 ...
 <javac srcdir="${src}:${figSRC}"
@@ -22,7 +24,7 @@ To make it run from commandline, it has to be built with the ant script it conta
 
 In runtime it still requires the .jar file, so we can build directly the subproject fig using its ant built.xml file and copy it to lib. To do so, we modify its ant file: 
 
-```
+```xml
 <project default="compile">
   <target name="compile" >
     <path id="lib.path">
@@ -35,6 +37,8 @@ In runtime it still requires the .jar file, so we can build directly the subproj
 ```
 
 Voilà!!
+
+--- 
 
 # Isolating steps
 
@@ -49,3 +53,16 @@ We start then using just the simple-sparql mode, which uses the lambda-DCS to SP
 	* *NodeToValue* has to be modified to provide better typing feedback ... currently all this information is lost, and everything comes again without any information. 
 	* *FreebaseInfo* should be modified to have information about the ontology in a more generic way. **Conversion to SchemaInfo?** Using an OWL ontology to get all such information using the OWLAPI is not so difficult and would make a difference. Different possible sources: hardcoded freebase schema source, ontologies, SPARQL endpoint self-check (SPARKLIS-like approach). 
 
+	* **execute** gets a **Formula** and returns a **Response**
+		* this method is the one making the translation lambda-DCS -> SPARQL using **Converter** class
+		* each variable has a *unit* (String) and a *description* (String)
+		* the method is **convert** 
+			* first check whether a ValueFormula or a NameValue has been passed 
+
+	* problems with *fb:type.object.type* in the NameValues, which expands to have also the type
+		* **addEntityStatement** adds a block, which is not optional -> could be modified to OptionalStatement	
+		* it does not retrieves correctly the data **the graph pattern is empty**
+
+---
+
+**New SemanticFns** in Grammar, they are searched in the **Grammar** class

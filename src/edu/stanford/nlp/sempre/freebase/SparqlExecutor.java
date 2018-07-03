@@ -482,7 +482,9 @@ public class SparqlExecutor extends Executor {
       // This is dangerous because in the DB, not all entities are necessarily labeled with fb:common.topic
       //addStatement(block, var, FreebaseInfo.TYPE, new ValueFormula(new NameValue(FreebaseInfo.ENTITY)));
       // Only needed when includeEntityNames = true.
-      addStatement(block, var, FreebaseInfo.TYPE, newVar());
+      
+    	// addOptionalStatement(block, var, FreebaseInfo.TYPE, newVar());
+    	addOptionalStatement(block, var, "a" , newVar() );
     }
 
     // Update the unit of |var| if necessary.
